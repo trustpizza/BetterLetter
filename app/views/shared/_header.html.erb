@@ -5,12 +5,51 @@
       <%= image_tag "favicon.svg", class: "h-8", alt: "BetterLetter Logo" %>
       <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-blue-400 text-blue-500 hover:underline">BetterLetter</span>
     <% end %>
-    <!-- User nav section -->
 
+    <!-- organization nav section -->
     <div class="lg:justify-self-end flex items-center lg:order-2 space-x-3 lg:space-x-0 rtl:space-x-reverse">
+      <% if organization_signed_in? %>
+        <button type="button" class="flex text-sm bg-gray-800 rounded-full lg:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="organization-menu-button" aria-expanded="false" data-dropdown-toggle="organization-dropdown" data-dropdown-placement="bottom">
+          <span class="sr-only">Open organization menu</span>
+          <% if current_organization.organization_profile.logo.attached? %>
+            <%= image_tag current_organization.organization_profile.logo, class: "w-8 h-8 rounded-full", alt: "organization Photo" %>
+          <% else %>
+            <%= image_tag "default-organization", class: "w-8 h-8 rounded-full bg-white border", alt: "organization Photo" %>
+          <% end %>
+        </button>
+
+        <!-- Dropdown menu -->
+          <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="organization-dropdown">
+            <div class="px-4 py-3">
+              <span class="block text-sm text-gray-900 dark:text-white">
+                <%= current_organization.organization_profile.name %>
+              </span>
+              <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">
+                <%= current_organization.email %>
+              </span>
+            </div>
+            <ul class="py-2" aria-labelledby="organization-menu-button">
+              <li>
+                <%= link_to "Settings", edit_organization_profile_path(current_organization.organization_profile), class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
+              </li>
+              <li>
+                <%= link_to "Sign Out", destroy_organization_session_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
+              </li>
+            </ul>
+          </div>
+      <% else %>
+        <%= link_to "Sign In", new_organization_session_path, class: "block py-2 px-3 text-blue-600 rounded hover:bg-blue-100 lg:hover:underline lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0 lg:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" %>
+      <% end %>
+
+      <button data-collapse-toggle="navbar-organization" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-organization" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+      </button>
     </div>
     <!-- Nav Links -->
-    <div class="lg:col-span-2 items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1" id="navbar-user">
+    <div class="lg:col-span-2 items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1" id="navbar-organization">
       <ul class="lg:w-full lg:justify-around flex flex-col font-medium p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:mt-0 lg:border-0 lg:bg-white dark:bg-gray-800 lg:dark:bg-gray-900 dark:border-gray-700">
         <li>
           <%= link_to "Home", root_url, class: "block py-2 px-3 text-blue-600 rounded hover:bg-blue-100 lg:hover:underline lg:hover:bg-transparent lg:hover:text-blue-700 lg:p-0 lg:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" %>
