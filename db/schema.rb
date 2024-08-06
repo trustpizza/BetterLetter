@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_01_190316) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_06_164555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_190316) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "job_postings", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.text "responsibilities"
+    t.text "qualifications"
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_job_postings_on_organization_id"
+  end
+
   create_table "organization_profiles", force: :cascade do |t|
     t.bigint "organization_id", null: false
     t.string "name"
@@ -65,5 +76,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_190316) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "job_postings", "organizations"
   add_foreign_key "organization_profiles", "organizations"
 end

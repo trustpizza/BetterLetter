@@ -9,6 +9,8 @@ class Organization < ApplicationRecord
   has_one :organization_profile, dependent: :destroy
   accepts_nested_attributes_for :organization_profile
 
+  has_many :job_postings
+
   private
 
   def build_default_profile

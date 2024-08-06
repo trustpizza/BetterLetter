@@ -1,5 +1,6 @@
 class OrganizationProfilesController < ApplicationController
-  before_action :set_organization_profile, only: %i[ show edit update destroy ]
+  before_action :set_organization_profile, only: %i[show edit update destroy]
+  before_action :authenticate_organization! # Ensure the organization is signed in
 
   # GET /organization_profiles or /organization_profiles.json
   def index
@@ -12,7 +13,7 @@ class OrganizationProfilesController < ApplicationController
 
   # GET /organization_profiles/new
   def new
-    @organization_profile = OrganizationProfile.new
+    @organization_profile = current_organization.organization_profiles.build
   end
 
   # GET /organization_profiles/1/edit
@@ -21,7 +22,7 @@ class OrganizationProfilesController < ApplicationController
 
   # POST /organization_profiles or /organization_profiles.json
   def create
-    @organization_profile = OrganizationProfile.new(organization_profile_params)
+    @organization_profile = current_organization.organization_profiles.build(organization_profile_params)
 
     respond_to do |format|
       if @organization_profile.save
@@ -65,6 +66,6 @@ class OrganizationProfilesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def organization_profile_params
-      params.require(:organization_profile).permit(:organization_id, :name, :description, :logo)
+      params.require(:organization_profile).permit(:name, :description, :logo)
     end
 end
